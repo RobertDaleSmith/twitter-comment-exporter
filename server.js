@@ -1,3 +1,8 @@
+const express = require('express');
+const cors = require('cors');
+const app = express();
+const port = 3001;
+
 const Twit = require('twit');
 const fs = require('fs');
 const Papa = require('papaparse');
@@ -55,52 +60,32 @@ const getAllComments = async (tweetId) => {
   return allComments;
 };
 
-const writeCsvFile = (comments) => {
-  // Sort comments by creation date from oldest to newest
-  const sortedComments = comments.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+app.use(cors());
 
-  // Map sorted comments to CSV data format, add a unique row number, and format the username as a URL
-  const csvData = sortedComments.map((comment, index) => ({
-    row: index + 1,
-    id: comment.id_str,
-    user: `https://twitter.com/${comment.user.screen_name}`,
-    text: comment.full_text.replace(/[\n\r]+/g, ' '),
-    created_at: comment.created_at,
-  }));
+app.get('/comments/:tweetId', async (req, res) => {
+  const tweetId = req.params.tweetId;
+  try {
+    const comments = await getAllComments(tweetId);
 
-  const csv = Papa.unparse(csvData);
-  fs.writeFile('comments.csv', csv, (err) => {
-    if (err) {
-      console.error('Error writing CSV file:', err);
-    } else {
-      console.log('CSV file written.');
-    }
-  });
-};
+    // Sort comments by creation date from oldest to newest
+    const sortedComments = comments.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
 
-const writeJsonFile = (comments) => {
-  // Sort comments by creation date from oldest to newest
-  const sortedComments = comments.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    // Map sorted comments to JSON data format and add a unique row number
+    const jsonData = sortedComments.map((comment, index) => ({
+      row: index + 1,
+      id: comment.id_str,
+      user: comment.user.screen_name,
+      text: comment.full_text.replace(/[\n\r]+/g, ' '),
+      created_at: comment.created_at,
+    }));
 
-  // Map sorted comments to JSON data format and add a unique row number
-  const jsonData = sortedComments.map((comment, index) => ({
-    row: index + 1,
-    id: comment.id_str,
-    user: comment.user.screen_name,
-    text: comment.full_text.replace(/[\n\r]+/g, ' '),
-    created_at: comment.created_at,
-  }));
+    res.json(jsonData);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch comments.' });
+  }
+});
 
-  fs.writeFile('comments.json', JSON.stringify(jsonData, null, 2), (err) => {
-    if (err) {
-      console.error('Error writing JSON file:', err);
-    } else {
-      console.log('JSON file written.');
-    }
-  });
-};
 
-(async () => {
-  const comments = await getAllComments(tweetId);
-  writeCsvFile(comments);
-})();
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});

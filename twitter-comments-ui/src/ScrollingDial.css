@@ -1,0 +1,33 @@
+/* ScrollingDial.css */
+.scrolling-dial-container {
+  border: 5px solid black;
+  height: 50px;
+  width: 100px;
+  overflow: hidden;
+  position: relative;
+}
+
+.scrolling-dial {
+  height: 100%;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+
+.dial-segment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  font-weight: bold;
+}
+
+.dial-segment.even {
+  background-color: gray;
+}
+
+.dial-segment.odd {
+  background-color: white;
+}

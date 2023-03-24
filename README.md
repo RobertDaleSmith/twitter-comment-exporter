@@ -1,30 +1,20 @@
 # Twitter Comment Exporter
 
-Twitter Comment Exporter is a simple Node.js tool that fetches all comments (replies) for a specific tweet and exports them to a CSV file. The exported CSV file contains rows sorted from oldest to newest, with each row having a unique number starting from 1.
+This tool exports comments from a specified tweet and displays them in a table on a frontend React app. It also includes a scrolling dial to randomly select a comment. The selected comment is then highlighted in the table.
 
 ## Features
 
-- Fetch all comments from a specific tweet
-- Export comments to a CSV file
-- Sort comments by date (oldest to newest)
-- Add a unique row number for each comment
+- Fetches comments for a given tweet ID
+- Exports comments into a JSON format
+- Displays comments in a table in a React frontend
+- Scrolling dial to randomly select a comment
+- Highlights the selected comment in the table
 
-## Installation
+## Backend Setup
 
-1. Clone this repository:
-
-```
-git clone https://github.com/yourusername/twitter-comment-exporter.git
-cd twitter-comment-exporter
-```
-
-2. Install the required dependencies:
-
-```
-npm install
-```
-
-3. Set up your Twitter API credentials as environment variables or directly in the `fetch_comments.js` file:
+1. Navigate to the `twitter-comment-exporter` folder
+2. Run `npm install` to install dependencies
+3. Create a `.env` file in the root folder with the following content:
 
 ```
 TWITTER_CONSUMER_KEY=<your_consumer_key>
@@ -33,19 +23,19 @@ TWITTER_ACCESS_TOKEN=<your_access_token>
 TWITTER_ACCESS_TOKEN_SECRET=<your_access_token_secret>
 ```
 
-4. Replace `YOUR_TWEET_ID` in the `fetch_comments.js` file with the ID of the tweet you want to fetch comments from.
+Replace the placeholder values with your actual Twitter API keys and tokens.
 
-## Usage
+4. Run `node server.js` to start the Express server. The server will listen on port 3001 by default.
 
-Run the script to fetch comments and export them to a `comments.csv` file:
+## Frontend Setup
 
-```
-node fetch_comments.js
-```
+1. Navigate to the `twitter-comment-exporter/twitter-comments-ui` folder
+2. Run `npm install` to install dependencies
+3. Run `npm start` to start the React app
+4. Open your browser and go to `http://localhost:3000` to view the frontend
+5. Enter a tweet ID and click "SPIN" to fetch comments and select a random comment
 
-The `comments.csv` file will be created in the project directory with the fetched comments.
+## License
 
-## Dependencies
+MIT License
 
-- [Twit](https://www.npmjs.com/package/twit): Twitter API Client for Node.js
-- [PapaParse](https://www.npmjs.com/package/papaparse): Fast and powerful CSV parser for JavaScript
