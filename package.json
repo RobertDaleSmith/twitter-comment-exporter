@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "fast-csv": "^4.3.6",
+    "papaparse": "^5.4.1",
+    "twit": "^2.2.11"
+  }
+}
